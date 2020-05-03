@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\QuestionResource;
 use App\Model\Question;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        return QuestionResource::collection(Question::latest()->get());
     }
 
     /**
@@ -35,7 +36,9 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    //    $question = auth()->user()->question()->create($request->all());
+        $question = Question::create($request->all());
+        return response(['data' => $question, 'success'=> 'Success create question'], 201);
     }
 
     /**
@@ -46,7 +49,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        return new QuestionResource($question);
     }
 
     /**
@@ -80,6 +83,10 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        if (!$question) {
+            return response(['error' => 'Question not found'], 404);
+        }
+        $question->delete();
+        return response(['success' => 'Success deleted'], 200);
     }
 }
