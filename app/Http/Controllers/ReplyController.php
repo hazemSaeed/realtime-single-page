@@ -10,6 +10,15 @@ use Illuminate\Http\Request;
 class ReplyController extends Controller
 {
     /**
+     * Create a new ReplyController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('JWT', ['except' => ['index', 'show']]);
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
