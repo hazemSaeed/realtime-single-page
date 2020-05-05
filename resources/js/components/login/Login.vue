@@ -54,15 +54,8 @@ export default {
         };
     },
     methods: {
-        async login() {
-            try {
-                console.log(this.formData);
-
-                const res = await axios.post("/api/auth/login", this.formData);
-                console.log(res);
-            } catch (err) {
-                console.log(err);
-            }
+        login() {
+            User.login(this.formData);
         }
     }
 };
