@@ -39,7 +39,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->slug = \Str::slug($request->name);
         $category->save();
-        return response('Created Success', 201);
+        return response(new CategoryResource($category), 201);
     }
 
     /**
@@ -77,7 +77,7 @@ class CategoryController extends Controller
             'name'=> $request->name,
             'slug'=> \Str::slug($request->name)
         ]);
-        return response('Update success', 200);
+        return response(new CategoryResource($category), 200);
     }
 
     /**

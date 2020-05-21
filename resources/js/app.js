@@ -8,12 +8,16 @@ require('./bootstrap');
 import vuetify from '../plugins/vuetify'
 import router from './Router/router';
 import User from './Helpers/User';
+import md from "marked";
+window.md = md;
 window.Vue = require('vue');
-
 window.User = User;
-console.log(User.id());
-// User.loggedOut()
+window.EventBus = new Vue();
 
+import VueSimplemde from 'vue-simplemde'
+import 'simplemde/dist/simplemde.min.css';
+
+Vue.component('vue-simplemde', VueSimplemde)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

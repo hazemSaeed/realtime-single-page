@@ -45,9 +45,8 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-    //    $question = auth()->user()->question()->create($request->all());
-        $question = Question::create($request->all());
-        return response(['data' => $question, 'success'=> 'Success create question'], 201);
+        $question = auth()->user()->question()->create($request->all());
+        return response(new QuestionResource($question), 201);
     }
 
     /**
