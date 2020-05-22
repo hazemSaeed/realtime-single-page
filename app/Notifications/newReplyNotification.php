@@ -2,11 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Http\Resources\ReplyResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Model\Reply;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class newReplyNotification extends Notification
 {
@@ -30,7 +32,7 @@ class newReplyNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -46,5 +48,15 @@ class newReplyNotification extends Notification
             'question' => $this->reply->question->title,
             'path' => $this->reply->question->path
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'replyBy' => $this->reply->user->name,
+            'question' => $this->reply->question->title,
+            'path' => $this->reply->question->path,
+            'reply' => new ReplyResource($this->reply)
+        ]);
     }
 }
