@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ReplyResource;
 use App\Model\Question;
 use App\Model\Reply;
+use App\Notifications\newReplyNotification;
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
@@ -25,7 +26,7 @@ class ReplyController extends Controller
      */
     public function index(Question $question)
     {
-       return ReplyResource::collection($question->replies);
+        return ReplyResource::collection($question->replies);
     }
 
     /**
@@ -37,7 +38,12 @@ class ReplyController extends Controller
     public function store(Question $question, Request $request)
     {
         $reply = $question->replies()->create($request->all());
-        return response(['data'=> new ReplyResource($reply)], 201);
+        $user = $question->user;
+        if($reply->user_id !== $question->user_id){
+
+            $user->notify(new newReplyNotification($reply));
+        }
+        return response(['data' => new ReplyResource($reply)], 201);
     }
 
     /**
@@ -46,7 +52,7 @@ class ReplyController extends Controller
      * @param  \App\Model\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function show(Question $question,Reply $reply)
+    public function show(Question $question, Reply $reply)
     {
         return new ReplyResource($reply);
     }
@@ -70,7 +76,7 @@ class ReplyController extends Controller
      * @param  \App\Model\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Question $question,Reply $reply)
+    public function destroy(Question $question, Reply $reply)
     {
         $reply->delete();
         return response('Deleted Success', 200);

@@ -16,8 +16,8 @@
 export default {
   props: ["reply"],
   methods: {
-    cancel() {
-      EventBus.$emit("cancelReply");
+    cancel(reply) {
+      EventBus.$emit("cancelReply", reply);
     },
     async save() {
       const res = await axios.patch(
@@ -25,7 +25,7 @@ export default {
         { body: this.reply.reply }
       );
       console.log(res.data);
-      this.cancel();
+      this.cancel(this.reply.reply);
     }
   }
 };
