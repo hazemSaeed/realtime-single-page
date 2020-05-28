@@ -1,9 +1,10 @@
 <template>
   <v-container>
     <v-form @submit.prevent="submit">
+      <v-alert type="error" v-if="errors.name">{{ errors.name[0] }}</v-alert>
       <v-text-field v-model="formData.name" label="Category Name*" required></v-text-field>
       <v-btn type="submit" class="pink" v-if="editSlug">Update</v-btn>
-      <v-btn type="submit" class="teal" v-else>Create</v-btn>
+      <v-btn type="submit" class="teal" :disabled="disabled" v-else>Create</v-btn>
     </v-form>
     <v-card tile class="mt-5">
       <v-toolbar color="indigo" dark dense class="mt-2">
@@ -39,8 +40,14 @@ export default {
         name: null
       },
       categories: {},
-      editSlug: null
+      editSlug: null,
+      errors: {}
     };
+  },
+  computed: {
+    disabled() {
+      return !this.formData.name;
+    }
   },
   methods: {
     submit() {
@@ -64,16 +71,18 @@ export default {
         `api/category/${this.editSlug}`,
         this.formData
       );
-      console.log(res.data);
       this.formData.name = null;
       this.editSlug = null;
       this.categories.unshift(res.data);
     },
     async create() {
-      const res = await axios.post("api/category", this.formData);
-      console.log(res.data);
-      this.formData.name = "";
-      this.categories.unshift(res.data);
+      try {
+        const res = await axios.post("api/category", this.formData);
+        this.formData.name = "";
+        this.categories.unshift(res.data);
+      } catch (err) {
+        this.errors = err.response.data.errors;
+      }
     }
   },
   async created() {

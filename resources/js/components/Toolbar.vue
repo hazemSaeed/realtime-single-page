@@ -1,7 +1,9 @@
 <template>
   <v-card color="grey lighten-4" flat tile>
-    <v-toolbar dense>
-      <v-toolbar-title>Bitfumes</v-toolbar-title>
+    <v-toolbar dense color="indigo" dark>
+      <v-toolbar-title>
+        <router-link dark to="/" tag="div" style="cursor: pointer;">Bitfumes</router-link>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
       <app-notification v-if="loggedIn"></app-notification>
