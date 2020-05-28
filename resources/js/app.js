@@ -8,10 +8,12 @@ require('./bootstrap');
 import vuetify from '../plugins/vuetify'
 import router from './Router/router';
 import User from './Helpers/User';
+import Exception from './Helpers/Exception';
 import md from "marked";
 window.md = md;
 window.Vue = require('vue');
 window.User = User;
+window.Exception = Exception;
 window.EventBus = new Vue();
 
 import VueSimplemde from 'vue-simplemde'

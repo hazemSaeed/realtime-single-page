@@ -56,7 +56,9 @@ export default {
                 this.read = res.data.read;
                 this.unread = res.data.unread;
                 this.unreadCount = res.data.unread.length;
-            } catch (err) {}
+            } catch (err) {
+                Exception.handle(err);
+            }
         },
         async readIt(notification) {
             try {

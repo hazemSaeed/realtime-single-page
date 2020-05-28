@@ -3,7 +3,10 @@
     <show-question v-if="question" :question="question"></show-question>
     <v-container>
       <replies-vue v-if="question" :question="question"></replies-vue>
-      <new-reply v-if="question" :questionSlug="question.slug"></new-reply>
+      <new-reply v-if="loggedIn" :questionSlug="question.slug"></new-reply>
+      <div v-else>
+        <router-link to="/login">Go To Login To Reply</router-link>
+      </div>
     </v-container>
   </div>
 </template>
@@ -27,7 +30,12 @@ export default {
       console.log(err.response.data.errors);
     }
   },
-  components: { ShowQuestion, RepliesVue, newReply }
+  components: { ShowQuestion, RepliesVue, newReply },
+  computed: {
+    loggedIn() {
+      return User.loggedIn();
+    }
+  }
 };
 </script>
 
